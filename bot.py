@@ -21,11 +21,11 @@ I am here to echo your kind words back to you. Just say anything nice and I'll s
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     markup = types.ReplyKeyboardMarkup()
-    itembtna = types.KeyboardButton('shabake tamasha')
-    itembtnv = types.KeyboardButton('shabake namayesh')
-    itembtnc = types.KeyboardButton('shabakeye 1')
-    itembtnd = types.KeyboardButton('shabakeye 2')
-    itembtne = types.KeyboardButton('shabakeye 3')
+    itembtna = types.KeyboardButton('شبکه نمایش')
+    itembtnv = types.KeyboardButton('شبکه نسیم')
+    itembtnc = types.KeyboardButton('شبکه یک')
+    itembtnd = types.KeyboardButton('شبکه دو')
+    itembtne = types.KeyboardButton('شبکه سه')
     markup.row(itembtna, itembtnv)
     markup.row(itembtnc, itembtnd, itembtne)
     cid = message.chat.id
@@ -62,7 +62,36 @@ def echo_message(message):
         count +=1
         for x in(i.contents):
             str1 +=  x
+    name_a1=[]
+    name_a =[]
+    zaman1=[] 
+    count=0
+    count1=0
+    url = "https://tvnasim.ir/conductor"
+    req = requests.get(url)
+    soup = BeautifulSoup(req.text, "html.parser")
+    name1 = soup.findAll(class_="program-name")
+    for i in name1:
+        name_a.append(i.findChildren('a',title=True))
+    for x in name_a: 
+        name_a1.append(x[0].attrs['title'])
+    zaman = soup.findAll(class_="text-center")
+    for z in zaman:
+        if count !=0 and count!=1:
+            zaman1.append(z.text)
+        count+=1
+    str2=""
+    for j in name_a1:
+        if count1!=0:
+            str2+="\n"
+        str2+=zaman1[count1]+": "
+        str2+=j
+        count1+=1
 
-    bot.reply_to(message, str1)
+
+    if message.text=="شبکه نمایش":
+        bot.reply_to(message, str1)
+    if message.text=="شبکه نسیم":
+        bot.reply_to(message, str2)
 
 bot.infinity_polling()
